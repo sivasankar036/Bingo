@@ -1,0 +1,117 @@
+import numpy as np
+import random
+#Random array
+arr=np.arange(1,26)
+random.shuffle(arr)
+res=arr.reshape(5,5)
+arr=[]
+
+print("-------------WELCOME TO BINGO GAME-----------{DEVELOPED BY - SivaSankar}")
+def board(res):
+  t="   B    I    N    G    O"
+  print(t)
+  for row in res:
+      print("|", end="")
+      for num in row:
+        if num==0:
+          print("\033[91m" + f" {num:2}" + "\033[0m",end=" |")
+        else:
+          print(f" {num:2}", end=" |")
+      print()
+board(res)
+ar=np.arange(1,26)
+random.shuffle(ar)
+re=ar.reshape(5,5)
+#computer
+
+def com(n):
+  col,row=[],[]
+  bingo=0
+  tem1,tem2=0,0
+  c=random.randint(1,26)
+  if n!=c:
+    while n in arr and c  in arr:
+      c=random.randint(1,26)
+  else:
+    c=random.randint(1,26)
+  # print("user:",n)
+  # print("list:",arr)
+  for i in range(5):
+      for j in range(5):
+          if re[i][j]==c or re[i][j]==n:
+              re[i][j]=0
+  if any(np.fliplr(re).diagonal())==0 and tem1==0:
+    tem1=1
+    bingo+=1
+  elif any(re.diagonal())==0 and tem2==0:
+    tem2=1
+    bingo+=1
+  for k in range(5):
+    if -k not in col and ~re.any(axis=0)[k]:
+      col.append(-k)
+      bingo+=1
+    if k not in row and ~re.any(axis=1)[k]:
+      row.append(k)
+      bingo+=1
+  if bingo!=5:
+    # print("--------computer---------")
+    # print(f"OPPONENT:- GIVEN NUMBER IS:{n}")
+    # print(f"COMPUTER:- SELECTED NUMBER IS :{c}")
+    # print(f"COMPTER :- Score is:{bingo}")
+    # board(re)
+    return c
+  else:
+    return "Computer won the game"
+
+#user
+def checkBoard(board):
+  col,row=[],[]
+  bingo=0
+  flag=True
+  f="Mundu game ela adalo nerchukoni raa bacha..hahaha"
+  tem1,tem2,b=0,0,1
+  while flag:
+    try:
+      n=int(input("Enter the number:"))
+      if n=="exit" or n=="Exit":
+        break
+      if n>=1 and n<=25 :
+        while n in arr:
+          n=int(input("Entered Number already Existed"))
+        arr.append(n)
+        f=com(n)
+        arr.append(f)
+        print(f"Computer:{f}")
+      else:
+        print("Babu neeku game adhadham VACHA...!")
+      for i in range(5):
+          for j in range(5):
+              if res[i][j]==n or res[i][j]==f:
+                  res[i][j]=0
+      if any(np.fliplr(res).diagonal())==0 and tem1==0:
+        tem1=1
+        bingo+=1
+      elif any(res.diagonal())==0 and tem2==0:
+        tem2=1
+        bingo+=1
+      for k in range(5):
+        if -k not in col and ~res.any(axis=0)[k]:
+          col.append(-k)
+          bingo+=1
+        if k not in row and ~res.any(axis=1)[k]:
+          row.append(k)
+          bingo+=1
+        if bingo==5:
+          print("YOU won the game")
+          flag=False
+          break
+      print("------USER--------")
+      print(f"OPPONENT:- GIVEN NUMBER IS:{f}")
+      print(f"YOU:- SELECTED NUMBER IS :{n}")
+      print(f"Your Score is:{bingo}")
+      board(res)
+    except:
+       print("Khan tho games vaddhu thammudu shaltilu lechipotai muskoni string kakunda number enter chey..!")
+def main():
+  checkBoard(board)
+main()
